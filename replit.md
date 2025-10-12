@@ -1,0 +1,152 @@
+# NavalSight - Maritime AI Command Center
+
+## Overview
+
+NavalSight is a web-based maritime AI command center designed for threat detection and image analysis. The application provides a role-based access control system where users can monitor maritime activities, process images, detect threats, and manage AI models. The system supports three user roles (Admin, Operator, Viewer) with different permission levels and features a comprehensive dashboard for real-time monitoring and analytics.
+
+## Recent Changes
+
+**October 12, 2025 - Complete Implementation**
+- ✅ Created full HTML structure with 11 functional pages (Login, Dashboard, Upload & Enhancement, Threat Detection, Analytics, System Health, Notifications, Model Management, Settings)
+- ✅ Implemented comprehensive CSS styling with dark navy/teal theme, responsive design, and smooth animations
+- ✅ Built all JavaScript functionality: navigation, role-based access control, real-time clock, Chart.js integration
+- ✅ Added simulated image enhancement with progress bars, metrics (PSNR, SSIM, UIQM), and before/after comparison
+- ✅ Implemented threat detection simulation with canvas-based bounding boxes and threat severity tables
+- ✅ Integrated Chart.js for dashboard and analytics visualizations (line, pie, doughnut, bar charts)
+- ✅ Implemented proper role-based authorization with permission guards on all navigation paths
+- ✅ Added modal system for user feedback and alerts
+- ✅ Server running on port 5000 via Python HTTP server
+
+## User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+## System Architecture
+
+### Frontend Architecture
+
+**Technology Stack:**
+- Pure HTML/CSS/JavaScript (Vanilla JS) - No frontend framework
+- Font Awesome for icons
+- Chart visualization library (implementation pending)
+
+**Design Decisions:**
+- Single Page Application (SPA) pattern with client-side navigation
+- Role-based UI rendering - menu items and features are conditionally displayed based on user permissions
+- Responsive design with sidebar navigation and top navbar
+- Dark theme optimized for command center environments
+
+**Component Structure:**
+- Login screen with authentication form
+- Main application container with navbar and sidebar
+- Multiple page modules: Dashboard, Upload, Threat Detection, Analytics, System Health, Notifications, Model Management, Settings
+- Modal system for dialogs and detailed views
+
+### Authentication & Authorization
+
+**Access Control Model:**
+- Role-based permissions system with three tiers:
+  - **Admin**: Full access to all features including settings
+  - **Operator**: Access to operational features (no settings)
+  - **Viewer**: Read-only access to dashboards and notifications
+- Client-side permission checking via `rolePermissions` object
+- Page-level access control through `hasAccess()` function
+
+**Security Considerations:**
+- Current implementation uses client-side authentication (suitable for prototype)
+- Production deployment would require backend authentication service
+- Session management handled in browser state
+
+### Data Visualization
+
+**Dashboard Analytics:**
+- Real-time metrics display (Total Images Processed, Threats Detected, Active Model status, Edge Devices Online)
+- Time-series line chart for 7-day image processing trends
+- Pie chart for threat type distribution
+- System health monitoring with status indicators
+
+**Chart Library Integration:**
+- Charts object structure prepared for library initialization
+- Supports dynamic data updates for real-time monitoring
+
+### State Management
+
+**Client-Side State:**
+- `currentUser` object stores active user session and role
+- `charts` object maintains references to visualization instances
+- DOM-based state for UI interactions (sidebar toggle, modal display)
+
+**Data Flow:**
+- Event-driven architecture using native DOM events
+- Page navigation managed through `navigateToPage()` function
+- Form submissions handled with preventDefault pattern
+
+### UI/UX Patterns
+
+**Navigation:**
+- Collapsible sidebar with hamburger menu toggle
+- Active page highlighting in navigation
+- Responsive layout adapting to screen sizes
+
+**Theme System:**
+- CSS custom properties for consistent theming
+- Dark color scheme optimized for prolonged use
+- Maritime/military aesthetic with blue/teal accent colors
+
+**User Feedback:**
+- Real-time clock display in navbar
+- Notification system with bell icon
+- Status indicators using color coding (success: green, warning: yellow, danger: red, info: blue)
+
+## External Dependencies
+
+### Frontend Libraries
+
+**Font Awesome 6.4.0** (CDN)
+- Purpose: Icon library for UI elements
+- Usage: Navigation icons, status indicators, user interface controls
+- Integration: CDN link in HTML head
+
+**Chart.js 4.x** (CDN - Integrated)
+- Purpose: Data visualization for dashboard and analytics
+- Implementation: Line charts, pie charts, doughnut charts, bar charts
+- Features: Real-time updates, responsive design, dark theme compatible
+- Usage: Dashboard metrics, analytics trends, threat distribution visualization
+
+### Planned Integrations
+
+**Backend API** (Not yet implemented)
+- Authentication service for user login
+- Image processing and enhancement endpoints
+- Threat detection model API
+- Analytics data aggregation
+- Model management and deployment
+- System health monitoring
+- Notification service
+
+**AI/ML Services** (Architecture prepared)
+- Image enhancement models (Full and Quantized versions)
+- Threat detection algorithms
+- Edge device model deployment
+- Real-time inference capabilities
+
+**Database Requirements** (To be implemented)
+- User authentication and role management
+- Image metadata and processing history
+- Threat detection logs and analytics
+- System health metrics and logs
+- Notification storage and delivery status
+- Model version and configuration management
+
+### Development Tools
+
+**No build tools currently required**
+- Pure HTML/CSS/JS implementation
+- Direct browser execution
+- Static file serving sufficient for current architecture
+
+**Future Considerations:**
+- Module bundler may be needed for scaling (Webpack, Vite)
+- TypeScript for type safety in larger codebase
+- Testing framework integration (Jest, Cypress)
+- API client library for backend communication (Axios, Fetch API wrapper)
