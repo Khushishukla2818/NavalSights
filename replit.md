@@ -6,6 +6,14 @@ NavalSight is a web-based maritime AI command center designed for threat detecti
 
 ## Recent Changes
 
+**October 12, 2025 - Advanced Features & UI Enhancement**
+- ✅ **Reports & Downloads Page**: Complete report system with side-by-side image comparison (original/enhanced/detected), detailed metrics display (PSNR, SSIM, UIQM), threat analysis, and download options for PDF, Raw Images, JSON Data, and Model Outputs
+- ✅ **Alert Configuration System**: Confidence and severity threshold sliders, alert method selection (Email/SMS/In-App), test alert functionality, and auto-save configuration
+- ✅ **Enhanced Settings Page**: Model deployment options (Full/Quantized/Docker/TensorRT), comprehensive retention policy (7 days to 1 year), auto-delete controls, security settings (encryption, access logging, 2FA)
+- ✅ **Enhanced CSS**: Modern UI with gradients, animations, glassmorphism effects, custom range sliders, download cards, alert configuration styling, and professional transitions
+- ✅ **Automatic Report Updates**: Detection results automatically populate report preview with images, metrics, and threat analysis
+- ✅ **Model Deployment Tools**: Download buttons for Full/Quantized/TensorRT models, Docker pull command integration, deployment card UI
+
 **October 12, 2025 - Enhanced Features Update**
 - ✅ **Image Enhancement Workflow**: Complete 4-step process with sample maritime images, model selection cards, animated processing status, and side-by-side comparison with metrics
 - ✅ **Threat Detection Workflow**: Enhanced 3-step detection system with sample images, AI model selection, canvas-based bounding boxes, color-coded severity, and threat analysis table
