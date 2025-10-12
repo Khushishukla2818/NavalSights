@@ -5,9 +5,9 @@ let enhancedImage = null;
 let selectedThreatImage = null;
 
 const rolePermissions = {
-    admin: ['dashboard', 'upload', 'threat', 'analytics', 'health', 'notifications', 'models', 'settings'],
-    operator: ['dashboard', 'upload', 'threat', 'analytics', 'health', 'notifications', 'models'],
-    viewer: ['dashboard', 'threat', 'analytics', 'health', 'notifications']
+    admin: ['dashboard', 'upload', 'threat', 'reports', 'analytics', 'health', 'notifications', 'models', 'settings'],
+    operator: ['dashboard', 'upload', 'threat', 'reports', 'analytics', 'health', 'notifications', 'models'],
+    viewer: ['dashboard', 'threat', 'reports', 'analytics', 'health', 'notifications']
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -581,6 +581,19 @@ function performThreatDetection(imageSrc) {
         });
 
         populateThreatsTable(threats);
+        
+        const highestSeverity = threats.some(t => t.severity === 'high') ? 'HIGH' : 
+                               threats.some(t => t.severity === 'medium') ? 'MEDIUM' : 'LOW';
+        const detectedImage = canvas.toDataURL('image/jpeg', 0.95);
+        const psnr = document.getElementById('psnr-value')?.textContent;
+        const ssim = document.getElementById('ssim-value')?.textContent;
+        const uiqm = document.getElementById('uiqm-value')?.textContent;
+        
+        updateReportData(selectedImage, enhancedImage || selectedImage, detectedImage, threats.length, psnr, ssim, uiqm);
+        
+        if (document.getElementById('report-severity')) {
+            document.getElementById('report-severity').textContent = highestSeverity;
+        }
     };
 
     img.src = imageSrc;
@@ -735,4 +748,78 @@ function showModal(title, message) {
         <button class="btn-primary" onclick="document.getElementById('modal').style.display='none'" style="margin-top: 1.5rem;">OK</button>
     `;
     modal.style.display = 'block';
+}
+
+function downloadReport(type) {
+    const typeNames = {
+        pdf: 'PDF Report',
+        images: 'Raw Images Package',
+        json: 'JSON Data',
+        model: 'Model Outputs'
+    };
+    showModal('Download Started', `${typeNames[type]} download will begin shortly!`);
+}
+
+function updateThreshold(type, value) {
+    document.getElementById(`${type}-value`).textContent = `${value}%`;
+}
+
+function toggleAlertMethod(element, method) {
+    element.classList.toggle('active');
+    const isActive = element.classList.contains('active');
+    showModal('Alert Method Updated', `${method.toUpperCase()} alerts ${isActive ? 'enabled' : 'disabled'}`);
+}
+
+function saveAlertConfig() {
+    const confidence = document.getElementById('confidence-threshold').value;
+    const severity = document.getElementById('severity-threshold').value;
+    showModal('Configuration Saved', `Alert thresholds saved: Confidence ${confidence}%, Severity ${severity}`);
+}
+
+function testAlert() {
+    showModal('Test Alert Sent', 'Test alert has been sent via all active methods!');
+}
+
+function downloadModel(type) {
+    const modelNames = {
+        full: 'Full Model Package',
+        quantized: 'Quantized Model Package',
+        tensorrt: 'TensorRT Optimized Model'
+    };
+    showModal('Download Started', `${modelNames[type]} download will begin shortly!`);
+}
+
+function pullDocker() {
+    showModal('Docker Pull Started', 'Docker pull command: docker pull navalsight/maritime-ai:latest\n\nThis will download the pre-configured environment with all dependencies.');
+}
+
+function resetSettings() {
+    if (confirm('Are you sure you want to reset all settings to defaults?')) {
+        showModal('Settings Reset', 'All settings have been reset to default values!');
+    }
+}
+
+function updateReportData(original, enhanced, detected, threats, psnr, ssim, uiqm) {
+    if (document.getElementById('report-original')) {
+        document.getElementById('report-original').src = original || '';
+        document.getElementById('report-enhanced').src = enhanced || '';
+        document.getElementById('report-detected').src = detected || '';
+        document.getElementById('report-timestamp').textContent = new Date().toLocaleString();
+        document.getElementById('report-threats').textContent = threats || '0';
+        document.getElementById('report-psnr').textContent = psnr ? `${psnr} dB` : '-';
+        document.getElementById('report-ssim').textContent = ssim || '-';
+        document.getElementById('report-uiqm').textContent = uiqm || '-';
+        
+        const selectedModel = document.querySelector('input[name="enhancement-model"]:checked');
+        if (selectedModel) {
+            const modelCard = selectedModel.closest('.model-option');
+            document.getElementById('report-enh-model').textContent = modelCard.querySelector('h4').textContent;
+        }
+        
+        const detectionModel = document.querySelector('input[name="detection-model"]:checked');
+        if (detectionModel) {
+            const detCard = detectionModel.closest('.detection-model-option');
+            document.getElementById('report-det-model').textContent = detCard.querySelector('h4').textContent;
+        }
+    }
 }
