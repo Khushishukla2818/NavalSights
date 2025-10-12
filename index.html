@@ -151,65 +151,173 @@
                 <h2>Upload & Enhancement</h2>
                 <div class="upload-steps">
                     <div class="step active" id="step1">
-                        <h3>Step 1: Upload Image or Video</h3>
+                        <h3><span class="step-number">1</span> Select or Upload Image</h3>
+                        <p class="step-description">Choose a sample maritime image or upload your own</p>
+                        
+                        <div class="sample-images-section">
+                            <h4>Sample Maritime Images:</h4>
+                            <div class="sample-images-grid" id="sample-images-grid">
+                                <div class="sample-image-card" data-image="attached_assets/stock_images/underwater_ocean_sce_b355f0c6.jpg">
+                                    <img src="attached_assets/stock_images/underwater_ocean_sce_b355f0c6.jpg" alt="Underwater Scene 1">
+                                    <p>Underwater Scene</p>
+                                </div>
+                                <div class="sample-image-card" data-image="attached_assets/stock_images/underwater_ocean_sce_df4df212.jpg">
+                                    <img src="attached_assets/stock_images/underwater_ocean_sce_df4df212.jpg" alt="Underwater Scene 2">
+                                    <p>Ocean Floor</p>
+                                </div>
+                                <div class="sample-image-card" data-image="attached_assets/stock_images/naval_ship_at_sea_551e7db4.jpg">
+                                    <img src="attached_assets/stock_images/naval_ship_at_sea_551e7db4.jpg" alt="Naval Ship">
+                                    <p>Naval Ship</p>
+                                </div>
+                                <div class="sample-image-card" data-image="attached_assets/stock_images/submarine_underwater_99e22efe.jpg">
+                                    <img src="attached_assets/stock_images/submarine_underwater_99e22efe.jpg" alt="Submarine">
+                                    <p>Submarine</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="divider">OR</div>
+                        
                         <div class="upload-area" id="upload-area">
                             <i class="fas fa-cloud-upload-alt"></i>
                             <p>Drag & drop your file here or click to browse</p>
-                            <input type="file" id="file-input" accept="image/*,video/*" hidden>
+                            <input type="file" id="file-input" accept="image/*" hidden>
+                        </div>
+                        
+                        <div class="selected-image-preview" id="selected-preview" style="display: none;">
+                            <h4>Selected Image:</h4>
+                            <img id="preview-image" alt="Preview">
+                            <button class="btn-primary" id="proceed-to-step2">
+                                <i class="fas fa-arrow-right"></i> Proceed to Enhancement
+                            </button>
                         </div>
                     </div>
+                    
                     <div class="step" id="step2">
-                        <h3>Step 2: Select Enhancement Model</h3>
-                        <div class="model-selector">
-                            <label><input type="radio" name="enhancement-model" value="unet" checked> U-Net</label>
-                            <label><input type="radio" name="enhancement-model" value="cyclegan"> CycleGAN</label>
-                            <label><input type="radio" name="enhancement-model" value="pix2pix"> Pix2Pix</label>
-                            <label><input type="radio" name="enhancement-model" value="deepseanet"> DeepSeaNet</label>
+                        <h3><span class="step-number">2</span> Select Enhancement Model</h3>
+                        <p class="step-description">Choose the AI model for image enhancement</p>
+                        <div class="model-selector-enhanced">
+                            <label class="model-option">
+                                <input type="radio" name="enhancement-model" value="unet" checked>
+                                <div class="model-card-option">
+                                    <i class="fas fa-network-wired"></i>
+                                    <h4>U-Net</h4>
+                                    <p>Best for clarity & detail enhancement</p>
+                                </div>
+                            </label>
+                            <label class="model-option">
+                                <input type="radio" name="enhancement-model" value="cyclegan">
+                                <div class="model-card-option">
+                                    <i class="fas fa-sync-alt"></i>
+                                    <h4>CycleGAN</h4>
+                                    <p>Style transfer & color correction</p>
+                                </div>
+                            </label>
+                            <label class="model-option">
+                                <input type="radio" name="enhancement-model" value="pix2pix">
+                                <div class="model-card-option">
+                                    <i class="fas fa-image"></i>
+                                    <h4>Pix2Pix</h4>
+                                    <p>Image-to-image translation</p>
+                                </div>
+                            </label>
+                            <label class="model-option">
+                                <input type="radio" name="enhancement-model" value="deepseanet">
+                                <div class="model-card-option">
+                                    <i class="fas fa-water"></i>
+                                    <h4>DeepSeaNet</h4>
+                                    <p>Specialized for underwater scenes</p>
+                                </div>
+                            </label>
                         </div>
-                    </div>
-                    <div class="step" id="step3">
-                        <h3>Step 3: Enhance Image</h3>
-                        <button class="btn-primary" id="enhance-btn" disabled>
-                            <i class="fas fa-magic"></i> Enhance Image
+                        <button class="btn-primary" id="start-enhancement-btn">
+                            <i class="fas fa-magic"></i> Start Enhancement
                         </button>
-                        <div class="progress-container" id="progress-container" style="display: none;">
-                            <div class="progress-bar" id="progress-bar"></div>
-                            <p id="progress-text">0%</p>
+                    </div>
+                    
+                    <div class="step" id="step3">
+                        <h3><span class="step-number">3</span> Processing</h3>
+                        <p class="step-description">AI model is enhancing your image...</p>
+                        <div class="processing-status">
+                            <div class="processing-steps">
+                                <div class="process-item" id="process-1">
+                                    <i class="fas fa-circle-notch fa-spin"></i>
+                                    <span>Loading image...</span>
+                                </div>
+                                <div class="process-item" id="process-2">
+                                    <i class="fas fa-circle"></i>
+                                    <span>Applying AI model...</span>
+                                </div>
+                                <div class="process-item" id="process-3">
+                                    <i class="fas fa-circle"></i>
+                                    <span>Enhancing details...</span>
+                                </div>
+                                <div class="process-item" id="process-4">
+                                    <i class="fas fa-circle"></i>
+                                    <span>Calculating metrics...</span>
+                                </div>
+                            </div>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progress-fill"></div>
+                                </div>
+                                <p id="progress-text">0%</p>
+                            </div>
                         </div>
                     </div>
+                    
                     <div class="step" id="step4">
-                        <h3>Step 4: Results</h3>
-                        <div class="comparison-container" id="comparison-container" style="display: none;">
+                        <h3><span class="step-number">4</span> Enhancement Results</h3>
+                        <p class="step-description">Compare original and enhanced images</p>
+                        <div class="comparison-container" id="comparison-container">
                             <div class="image-comparison">
                                 <div class="image-box">
-                                    <h4>Original</h4>
+                                    <h4>Original Image</h4>
                                     <img id="original-image" alt="Original">
                                 </div>
                                 <div class="image-box">
-                                    <h4>Enhanced</h4>
+                                    <h4>Enhanced Image</h4>
                                     <img id="enhanced-image" alt="Enhanced">
+                                    <div class="enhancement-badge">
+                                        <i class="fas fa-check-circle"></i> Enhanced
+                                    </div>
                                 </div>
                             </div>
-                            <div class="metrics">
-                                <div class="metric">
-                                    <h4>PSNR</h4>
-                                    <p id="psnr-value">-</p>
+                            <div class="metrics-grid">
+                                <div class="metric-card-enhanced">
+                                    <i class="fas fa-chart-line"></i>
+                                    <div class="metric-info">
+                                        <h4>PSNR (Peak Signal-to-Noise Ratio)</h4>
+                                        <p id="psnr-value" class="metric-value">-</p>
+                                        <span class="metric-unit">dB</span>
+                                    </div>
                                 </div>
-                                <div class="metric">
-                                    <h4>SSIM</h4>
-                                    <p id="ssim-value">-</p>
+                                <div class="metric-card-enhanced">
+                                    <i class="fas fa-image"></i>
+                                    <div class="metric-info">
+                                        <h4>SSIM (Structural Similarity)</h4>
+                                        <p id="ssim-value" class="metric-value">-</p>
+                                        <span class="metric-unit">index</span>
+                                    </div>
                                 </div>
-                                <div class="metric">
-                                    <h4>UIQM</h4>
-                                    <p id="uiqm-value">-</p>
+                                <div class="metric-card-enhanced">
+                                    <i class="fas fa-water"></i>
+                                    <div class="metric-info">
+                                        <h4>UIQM (Underwater Quality)</h4>
+                                        <p id="uiqm-value" class="metric-value">-</p>
+                                        <span class="metric-unit">score</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="action-buttons">
-                                <button class="btn-secondary">
+                                <button class="btn-secondary" id="download-enhanced-btn">
                                     <i class="fas fa-download"></i> Download Enhanced Image
                                 </button>
-                                <button class="btn-primary" onclick="navigateToPage('threat')">
-                                    Next → Threat Detection
+                                <button class="btn-secondary" id="reset-enhancement-btn">
+                                    <i class="fas fa-redo"></i> Enhance Another Image
+                                </button>
+                                <button class="btn-primary" id="proceed-to-threat">
+                                    Next → Threat Detection <i class="fas fa-arrow-right"></i>
                                 </button>
                             </div>
                         </div>
@@ -219,50 +327,129 @@
 
             <div id="threat-page" class="page">
                 <h2>Threat Detection</h2>
-                <div class="threat-detection-container">
-                    <div class="detection-setup">
-                        <h3>Upload or Select Enhanced Image</h3>
+                <div class="threat-workflow">
+                    <div class="threat-step active" id="threat-step1">
+                        <h3><span class="step-number">1</span> Select Image for Detection</h3>
+                        <p class="step-description">Choose a maritime image to analyze for threats</p>
+                        
+                        <div class="threat-sample-images">
+                            <h4>Sample Images:</h4>
+                            <div class="threat-images-grid" id="threat-images-grid">
+                                <div class="threat-sample-card" data-image="attached_assets/stock_images/underwater_ocean_sce_d5d2ea95.jpg">
+                                    <img src="attached_assets/stock_images/underwater_ocean_sce_d5d2ea95.jpg" alt="Ocean Scene">
+                                    <p>Ocean Scene</p>
+                                </div>
+                                <div class="threat-sample-card" data-image="attached_assets/stock_images/naval_ship_at_sea_e3822959.jpg">
+                                    <img src="attached_assets/stock_images/naval_ship_at_sea_e3822959.jpg" alt="Naval Ship">
+                                    <p>Naval Ship</p>
+                                </div>
+                                <div class="threat-sample-card" data-image="attached_assets/stock_images/submarine_underwater_c054e742.jpg">
+                                    <img src="attached_assets/stock_images/submarine_underwater_c054e742.jpg" alt="Submarine">
+                                    <p>Submarine</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="divider">OR</div>
+                        
                         <div class="upload-area-small" id="threat-upload-area">
                             <i class="fas fa-image"></i>
-                            <p>Click to select image</p>
+                            <p>Click to upload your own image</p>
                             <input type="file" id="threat-file-input" accept="image/*" hidden>
                         </div>
-                        <h3>Choose Detection Model</h3>
-                        <div class="model-selector">
-                            <label><input type="radio" name="detection-model" value="yolov8" checked> YOLOv8</label>
-                            <label><input type="radio" name="detection-model" value="yolov5"> YOLOv5</label>
-                            <label><input type="radio" name="detection-model" value="marinenet"> MarineNet</label>
-                            <label><input type="radio" name="detection-model" value="vit"> ViT</label>
+                    </div>
+                    
+                    <div class="threat-step" id="threat-step2">
+                        <h3><span class="step-number">2</span> Choose Detection Model</h3>
+                        <p class="step-description">Select the AI model for threat detection</p>
+                        <div class="detection-models-grid">
+                            <label class="detection-model-option">
+                                <input type="radio" name="detection-model" value="yolov8" checked>
+                                <div class="detection-model-card">
+                                    <i class="fas fa-brain"></i>
+                                    <h4>YOLOv8</h4>
+                                    <p>Latest YOLO - Fast & Accurate</p>
+                                    <span class="model-accuracy">Accuracy: 94%</span>
+                                </div>
+                            </label>
+                            <label class="detection-model-option">
+                                <input type="radio" name="detection-model" value="yolov5">
+                                <div class="detection-model-card">
+                                    <i class="fas fa-eye"></i>
+                                    <h4>YOLOv5</h4>
+                                    <p>Balanced Performance</p>
+                                    <span class="model-accuracy">Accuracy: 91%</span>
+                                </div>
+                            </label>
+                            <label class="detection-model-option">
+                                <input type="radio" name="detection-model" value="marinenet">
+                                <div class="detection-model-card">
+                                    <i class="fas fa-ship"></i>
+                                    <h4>MarineNet</h4>
+                                    <p>Maritime Specialized</p>
+                                    <span class="model-accuracy">Accuracy: 96%</span>
+                                </div>
+                            </label>
+                            <label class="detection-model-option">
+                                <input type="radio" name="detection-model" value="vit">
+                                <div class="detection-model-card">
+                                    <i class="fas fa-robot"></i>
+                                    <h4>ViT (Vision Transformer)</h4>
+                                    <p>Advanced AI Architecture</p>
+                                    <span class="model-accuracy">Accuracy: 95%</span>
+                                </div>
+                            </label>
                         </div>
-                        <button class="btn-primary" id="detect-btn" disabled>
-                            <i class="fas fa-search"></i> Detect Threats
+                        <button class="btn-primary" id="start-detection-btn">
+                            <i class="fas fa-search"></i> Start Detection
                         </button>
                     </div>
-                    <div class="detection-results" id="detection-results" style="display: none;">
-                        <div class="detection-image-container">
-                            <canvas id="detection-canvas"></canvas>
-                        </div>
-                        <div class="threats-table-container">
-                            <h3>Detected Threats</h3>
-                            <table class="threats-table" id="threats-table">
-                                <thead>
-                                    <tr>
-                                        <th>Threat Type</th>
-                                        <th>Confidence</th>
-                                        <th>Severity</th>
-                                        <th>Location</th>
-                                        <th>Timestamp</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                            <div class="action-buttons">
-                                <button class="btn-secondary">
-                                    <i class="fas fa-file-pdf"></i> Download Report
-                                </button>
-                                <button class="btn-primary" id="send-alert-btn">
-                                    <i class="fas fa-paper-plane"></i> Send Alert
-                                </button>
+                    
+                    <div class="threat-step" id="threat-step3">
+                        <h3><span class="step-number">3</span> Detection Results</h3>
+                        <p class="step-description">Analyzing image for potential threats...</p>
+                        <div class="detection-results-layout">
+                            <div class="detection-image-container">
+                                <canvas id="detection-canvas"></canvas>
+                                <div class="detection-legend">
+                                    <div class="legend-item">
+                                        <div class="legend-color high"></div>
+                                        <span>High Severity</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-color medium"></div>
+                                        <span>Medium Severity</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-color low"></div>
+                                        <span>Low Severity</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="threats-info-panel">
+                                <h4><i class="fas fa-exclamation-triangle"></i> Detected Threats</h4>
+                                <table class="threats-table" id="threats-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Confidence</th>
+                                            <th>Severity</th>
+                                            <th>Location</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                                <div class="action-buttons">
+                                    <button class="btn-secondary" id="download-report-btn">
+                                        <i class="fas fa-file-pdf"></i> Download Report
+                                    </button>
+                                    <button class="btn-primary" id="send-alert-btn">
+                                        <i class="fas fa-paper-plane"></i> Send Alert
+                                    </button>
+                                    <button class="btn-secondary" id="reset-detection-btn">
+                                        <i class="fas fa-redo"></i> Detect Another
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

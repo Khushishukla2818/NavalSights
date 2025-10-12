@@ -1,5 +1,7 @@
 let currentUser = null;
 let charts = {};
+let selectedImage = null;
+let enhancedImage = null;
 
 const rolePermissions = {
     admin: ['dashboard', 'upload', 'threat', 'analytics', 'health', 'notifications', 'models', 'settings'],
@@ -285,9 +287,27 @@ function initializeAnalyticsCharts() {
 }
 
 function initializeUploadPage() {
+    const sampleImages = document.querySelectorAll('.sample-image-card');
     const uploadArea = document.getElementById('upload-area');
     const fileInput = document.getElementById('file-input');
-    const enhanceBtn = document.getElementById('enhance-btn');
+    const selectedPreview = document.getElementById('selected-preview');
+    const previewImage = document.getElementById('preview-image');
+    const proceedBtn = document.getElementById('proceed-to-step2');
+    const startEnhanceBtn = document.getElementById('start-enhancement-btn');
+    const downloadBtn = document.getElementById('download-enhanced-btn');
+    const resetBtn = document.getElementById('reset-enhancement-btn');
+    const proceedThreatBtn = document.getElementById('proceed-to-threat');
+
+    sampleImages.forEach(card => {
+        card.addEventListener('click', () => {
+            sampleImages.forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            const imagePath = card.dataset.image;
+            selectedImage = imagePath;
+            previewImage.src = imagePath;
+            selectedPreview.style.display = 'block';
+        });
+    });
 
     uploadArea.addEventListener('click', () => fileInput.click());
 
@@ -312,62 +332,164 @@ function initializeUploadPage() {
         handleFileUpload(file);
     });
 
-    enhanceBtn.addEventListener('click', performEnhancement);
+    proceedBtn.addEventListener('click', () => {
+        goToEnhancementStep(2);
+    });
+
+    startEnhanceBtn.addEventListener('click', () => {
+        performEnhancement();
+    });
+
+    downloadBtn.addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.download = 'enhanced-image.jpg';
+        link.href = document.getElementById('enhanced-image').src;
+        link.click();
+        showModal('Download Started', 'Enhanced image download started!');
+    });
+
+    resetBtn.addEventListener('click', () => {
+        resetEnhancement();
+    });
+
+    proceedThreatBtn.addEventListener('click', () => {
+        navigateToPage('threat');
+        if (enhancedImage) {
+            setTimeout(() => {
+                loadImageToThreatDetection(enhancedImage);
+            }, 300);
+        }
+    });
 }
 
 function handleFileUpload(file) {
     if (file && file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            document.getElementById('original-image').src = e.target.result;
-            document.getElementById('enhance-btn').disabled = false;
-            showModal('Success', 'File uploaded successfully!');
+            selectedImage = e.target.result;
+            document.getElementById('preview-image').src = e.target.result;
+            document.getElementById('selected-preview').style.display = 'block';
+            document.querySelectorAll('.sample-image-card').forEach(c => c.classList.remove('selected'));
         };
         reader.readAsDataURL(file);
     }
 }
 
+function goToEnhancementStep(stepNum) {
+    const steps = document.querySelectorAll('#upload-page .step');
+    steps.forEach(step => step.classList.remove('active'));
+    document.getElementById(`step${stepNum}`).classList.add('active');
+}
+
 function performEnhancement() {
-    const progressContainer = document.getElementById('progress-container');
-    const progressBar = document.getElementById('progress-bar').querySelector('.progress-bar');
+    goToEnhancementStep(3);
+
+    const processItems = [
+        { id: 'process-1', text: 'Loading image...', delay: 500 },
+        { id: 'process-2', text: 'Applying AI model...', delay: 1500 },
+        { id: 'process-3', text: 'Enhancing details...', delay: 2500 },
+        { id: 'process-4', text: 'Calculating metrics...', delay: 3500 }
+    ];
+
+    const progressFill = document.getElementById('progress-fill');
     const progressText = document.getElementById('progress-text');
-    const comparisonContainer = document.getElementById('comparison-container');
 
-    progressContainer.style.display = 'block';
     let progress = 0;
-
     const interval = setInterval(() => {
-        progress += 10;
-        progressBar.style.setProperty('--progress', `${progress}%`);
-        progressBar.querySelector('::before') ? null : progressBar.style.width = `${progress}%`;
+        progress += 2;
+        progressFill.style.width = `${progress}%`;
         progressText.textContent = `${progress}%`;
 
         if (progress >= 100) {
             clearInterval(interval);
-            setTimeout(() => {
-                progressContainer.style.display = 'none';
-                showEnhancedResults();
-            }, 500);
+            setTimeout(showEnhancedResults, 500);
         }
-    }, 200);
+    }, 60);
+
+    processItems.forEach((item, index) => {
+        setTimeout(() => {
+            const el = document.getElementById(item.id);
+            el.classList.add('active');
+            if (index > 0) {
+                const prevEl = document.getElementById(processItems[index-1].id);
+                prevEl.classList.remove('active');
+                prevEl.classList.add('completed');
+                prevEl.querySelector('i').className = 'fas fa-check-circle';
+            }
+        }, item.delay);
+    });
+
+    setTimeout(() => {
+        const lastItem = document.getElementById('process-4');
+        lastItem.classList.remove('active');
+        lastItem.classList.add('completed');
+        lastItem.querySelector('i').className = 'fas fa-check-circle';
+    }, 4000);
 }
 
 function showEnhancedResults() {
-    const originalSrc = document.getElementById('original-image').src;
-    document.getElementById('enhanced-image').src = originalSrc;
+    goToEnhancementStep(4);
 
-    document.getElementById('psnr-value').textContent = (28 + Math.random() * 7).toFixed(2) + ' dB';
+    document.getElementById('original-image').src = selectedImage;
+    
+    const img = new Image();
+    img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        
+        ctx.filter = 'contrast(1.2) brightness(1.1) saturate(1.3)';
+        ctx.drawImage(img, 0, 0);
+        
+        enhancedImage = canvas.toDataURL('image/jpeg', 0.95);
+        document.getElementById('enhanced-image').src = enhancedImage;
+    };
+    img.src = selectedImage;
+
+    document.getElementById('psnr-value').textContent = (28 + Math.random() * 7).toFixed(2);
     document.getElementById('ssim-value').textContent = (0.85 + Math.random() * 0.1).toFixed(3);
     document.getElementById('uiqm-value').textContent = (2.5 + Math.random() * 1.5).toFixed(2);
+}
 
-    document.getElementById('comparison-container').style.display = 'block';
+function resetEnhancement() {
+    goToEnhancementStep(1);
+    selectedImage = null;
+    enhancedImage = null;
+    document.getElementById('selected-preview').style.display = 'none';
+    document.getElementById('preview-image').src = '';
+    document.getElementById('file-input').value = '';
+    document.querySelectorAll('.sample-image-card').forEach(c => c.classList.remove('selected'));
+    
+    document.querySelectorAll('.process-item').forEach((item, index) => {
+        item.classList.remove('active', 'completed');
+        item.querySelector('i').className = index === 0 ? 'fas fa-circle-notch fa-spin' : 'fas fa-circle';
+    });
+    
+    document.getElementById('progress-fill').style.width = '0%';
+    document.getElementById('progress-text').textContent = '0%';
 }
 
 function initializeThreatPage() {
+    const threatSampleImages = document.querySelectorAll('.threat-sample-card');
     const threatUploadArea = document.getElementById('threat-upload-area');
     const threatFileInput = document.getElementById('threat-file-input');
-    const detectBtn = document.getElementById('detect-btn');
+    const startDetectionBtn = document.getElementById('start-detection-btn');
     const sendAlertBtn = document.getElementById('send-alert-btn');
+    const downloadReportBtn = document.getElementById('download-report-btn');
+    const resetDetectionBtn = document.getElementById('reset-detection-btn');
+
+    let selectedThreatImage = null;
+
+    threatSampleImages.forEach(card => {
+        card.addEventListener('click', () => {
+            threatSampleImages.forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedThreatImage = card.dataset.image;
+            goToThreatStep(2);
+        });
+    });
 
     threatUploadArea.addEventListener('click', () => threatFileInput.click());
 
@@ -376,25 +498,44 @@ function initializeThreatPage() {
         if (file && file.type.startsWith('image/')) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                detectBtn.disabled = false;
-                detectBtn.dataset.imageSrc = e.target.result;
-                showModal('Success', 'Image loaded for threat detection!');
+                selectedThreatImage = e.target.result;
+                goToThreatStep(2);
             };
             reader.readAsDataURL(file);
         }
     });
 
-    detectBtn.addEventListener('click', performThreatDetection);
+    startDetectionBtn.addEventListener('click', () => {
+        performThreatDetection(selectedThreatImage);
+    });
 
-    if (sendAlertBtn) {
-        sendAlertBtn.addEventListener('click', () => {
-            showModal('Alert Sent', 'Email and SMS alerts have been sent successfully!');
-        });
-    }
+    sendAlertBtn.addEventListener('click', () => {
+        showModal('Alert Sent', 'Email and SMS alerts have been sent successfully to all registered users!');
+    });
+
+    downloadReportBtn.addEventListener('click', () => {
+        showModal('Download Started', 'Threat detection report (PDF) download started!');
+    });
+
+    resetDetectionBtn.addEventListener('click', () => {
+        resetThreatDetection();
+    });
 }
 
-function performThreatDetection() {
-    const imageSrc = document.getElementById('detect-btn').dataset.imageSrc;
+function loadImageToThreatDetection(imageSrc) {
+    goToThreatStep(2);
+    performThreatDetection(imageSrc);
+}
+
+function goToThreatStep(stepNum) {
+    const steps = document.querySelectorAll('.threat-step');
+    steps.forEach(step => step.classList.remove('active'));
+    document.getElementById(`threat-step${stepNum}`).classList.add('active');
+}
+
+function performThreatDetection(imageSrc) {
+    goToThreatStep(3);
+
     const canvas = document.getElementById('detection-canvas');
     const ctx = canvas.getContext('2d');
     const img = new Image();
@@ -404,32 +545,56 @@ function performThreatDetection() {
         canvas.height = img.height;
         ctx.drawImage(img, 0, 0);
 
-        const threats = [
-            { type: 'Mine', confidence: 0.92, severity: 'high', x: 0.3, y: 0.4, w: 0.15, h: 0.15 },
-            { type: 'Submarine', confidence: 0.85, severity: 'high', x: 0.6, y: 0.3, w: 0.2, h: 0.2 },
-            { type: 'Debris', confidence: 0.78, severity: 'medium', x: 0.2, y: 0.7, w: 0.1, h: 0.1 }
-        ];
-
+        const threats = generateRandomThreats();
+        
         threats.forEach(threat => {
             const x = threat.x * canvas.width;
             const y = threat.y * canvas.height;
             const w = threat.w * canvas.width;
             const h = threat.h * canvas.height;
 
-            ctx.strokeStyle = threat.severity === 'high' ? '#ef4444' : '#eab308';
-            ctx.lineWidth = 3;
+            ctx.strokeStyle = threat.severity === 'high' ? '#ef4444' : threat.severity === 'medium' ? '#eab308' : '#22c55e';
+            ctx.lineWidth = 4;
             ctx.strokeRect(x, y, w, h);
 
-            ctx.fillStyle = threat.severity === 'high' ? '#ef4444' : '#eab308';
-            ctx.font = '16px Arial';
-            ctx.fillText(`${threat.type} ${(threat.confidence * 100).toFixed(0)}%`, x, y - 5);
+            ctx.fillStyle = threat.severity === 'high' ? '#ef4444' : threat.severity === 'medium' ? '#eab308' : '#22c55e';
+            ctx.font = 'bold 16px Arial';
+            const label = `${threat.type} ${(threat.confidence * 100).toFixed(0)}%`;
+            const metrics = ctx.measureText(label);
+            ctx.fillRect(x, y - 25, metrics.width + 10, 25);
+            ctx.fillStyle = '#fff';
+            ctx.fillText(label, x + 5, y - 7);
         });
 
         populateThreatsTable(threats);
-        document.getElementById('detection-results').style.display = 'block';
     };
 
     img.src = imageSrc;
+}
+
+function generateRandomThreats() {
+    const threatTypes = ['Mine', 'Submarine', 'Debris', 'Unknown Object', 'Naval Vessel'];
+    const numThreats = Math.floor(Math.random() * 3) + 2;
+    const threats = [];
+
+    for (let i = 0; i < numThreats; i++) {
+        const confidence = 0.7 + Math.random() * 0.3;
+        let severity = 'low';
+        if (confidence > 0.9) severity = 'high';
+        else if (confidence > 0.8) severity = 'medium';
+
+        threats.push({
+            type: threatTypes[Math.floor(Math.random() * threatTypes.length)],
+            confidence: confidence,
+            severity: severity,
+            x: Math.random() * 0.6 + 0.1,
+            y: Math.random() * 0.6 + 0.1,
+            w: 0.15 + Math.random() * 0.15,
+            h: 0.15 + Math.random() * 0.15
+        });
+    }
+
+    return threats;
 }
 
 function populateThreatsTable(threats) {
@@ -437,17 +602,25 @@ function populateThreatsTable(threats) {
     tbody.innerHTML = '';
 
     threats.forEach(threat => {
-        const now = new Date();
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${threat.type}</td>
             <td>${(threat.confidence * 100).toFixed(1)}%</td>
             <td class="severity-${threat.severity}">${threat.severity.toUpperCase()}</td>
-            <td>${(threat.x * 100).toFixed(1)}N, ${(threat.y * 100).toFixed(1)}E</td>
-            <td>${now.toLocaleString()}</td>
+            <td>${(threat.x * 100).toFixed(1)}°N, ${(threat.y * 100).toFixed(1)}°E</td>
         `;
         tbody.appendChild(tr);
     });
+}
+
+function resetThreatDetection() {
+    goToThreatStep(1);
+    document.querySelectorAll('.threat-sample-card').forEach(c => c.classList.remove('selected'));
+    document.getElementById('threat-file-input').value = '';
+    const canvas = document.getElementById('detection-canvas');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    document.querySelector('#threats-table tbody').innerHTML = '';
 }
 
 function initializeNotificationsPage() {
