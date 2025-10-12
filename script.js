@@ -2,6 +2,7 @@ let currentUser = null;
 let charts = {};
 let selectedImage = null;
 let enhancedImage = null;
+let selectedThreatImage = null;
 
 const rolePermissions = {
     admin: ['dashboard', 'upload', 'threat', 'analytics', 'health', 'notifications', 'models', 'settings'],
@@ -438,10 +439,20 @@ function showEnhancedResults() {
         const ctx = canvas.getContext('2d');
         canvas.width = img.width;
         canvas.height = img.height;
+        
+        ctx.filter = 'contrast(1.35) brightness(1.15) saturate(1.4)';
         ctx.drawImage(img, 0, 0);
         
-        ctx.filter = 'contrast(1.2) brightness(1.1) saturate(1.3)';
-        ctx.drawImage(img, 0, 0);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        
+        for (let i = 0; i < data.length; i += 4) {
+            data[i] = Math.min(255, data[i] * 1.15);
+            data[i + 1] = Math.min(255, data[i + 1] * 1.12);
+            data[i + 2] = Math.min(255, data[i + 2] * 1.2);
+        }
+        
+        ctx.putImageData(imageData, 0, 0);
         
         enhancedImage = canvas.toDataURL('image/jpeg', 0.95);
         document.getElementById('enhanced-image').src = enhancedImage;
@@ -480,8 +491,6 @@ function initializeThreatPage() {
     const downloadReportBtn = document.getElementById('download-report-btn');
     const resetDetectionBtn = document.getElementById('reset-detection-btn');
 
-    let selectedThreatImage = null;
-
     threatSampleImages.forEach(card => {
         card.addEventListener('click', () => {
             threatSampleImages.forEach(c => c.classList.remove('selected'));
@@ -506,7 +515,11 @@ function initializeThreatPage() {
     });
 
     startDetectionBtn.addEventListener('click', () => {
-        performThreatDetection(selectedThreatImage);
+        if (selectedThreatImage) {
+            performThreatDetection(selectedThreatImage);
+        } else {
+            showModal('No Image', 'Please select an image first!');
+        }
     });
 
     sendAlertBtn.addEventListener('click', () => {
@@ -523,8 +536,9 @@ function initializeThreatPage() {
 }
 
 function loadImageToThreatDetection(imageSrc) {
+    selectedThreatImage = imageSrc;
     goToThreatStep(2);
-    performThreatDetection(imageSrc);
+    showModal('Enhanced Image Loaded', 'Your enhanced image is ready for threat detection. Select a model and click "Start Detection".');
 }
 
 function goToThreatStep(stepNum) {
@@ -614,6 +628,7 @@ function populateThreatsTable(threats) {
 }
 
 function resetThreatDetection() {
+    selectedThreatImage = null;
     goToThreatStep(1);
     document.querySelectorAll('.threat-sample-card').forEach(c => c.classList.remove('selected'));
     document.getElementById('threat-file-input').value = '';
