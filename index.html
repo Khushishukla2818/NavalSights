@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NavalSight — Maritime AI Command Center</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <i class="fas fa-ship"></i>
+                <h1>NavalSight</h1>
+                <p>Maritime AI Command Center</p>
+            </div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">Select Role</label>
+                    <select id="role" required>
+                        <option value="admin">Admin</option>
+                        <option value="operator">Operator</option>
+                        <option value="viewer">Viewer</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="app" class="app" style="display: none;">
+        <nav class="navbar">
+            <div class="navbar-left">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1><i class="fas fa-ship"></i> NavalSight — Maritime AI Command Center</h1>
+            </div>
+            <div class="navbar-right">
+                <div class="clock" id="clock"></div>
+                <button class="icon-btn" id="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button class="icon-btn" id="profile-btn">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+            </div>
+        </nav>
+
+        <aside class="sidebar" id="sidebar">
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#upload" class="nav-item" data-page="upload">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload & Enhancement</span>
+                </a>
+                <a href="#threat" class="nav-item" data-page="threat">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Threat Detection</span>
+                </a>
+                <a href="#analytics" class="nav-item" data-page="analytics">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="#health" class="nav-item" data-page="health">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>System Health</span>
+                </a>
+                <a href="#notifications" class="nav-item" data-page="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </a>
+                <a href="#models" class="nav-item" data-page="models">
+                    <i class="fas fa-brain"></i>
+                    <span>Model Management</span>
+                </a>
+                <a href="#settings" class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content" id="main-content">
+            <div id="dashboard-page" class="page active">
+                <h2>Dashboard</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-images"></i></div>
+                        <div class="card-content">
+                            <h3>Total Images Processed</h3>
+                            <p class="stat-value">1,247</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon warning"><i class="fas fa-exclamation-circle"></i></div>
+                        <div class="card-content">
+                            <h3>Threats Detected</h3>
+                            <p class="stat-value">23</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon success"><i class="fas fa-robot"></i></div>
+                        <div class="card-content">
+                            <h3>Active Model</h3>
+                            <p class="stat-value">YOLOv8 (Full)</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon info"><i class="fas fa-server"></i></div>
+                        <div class="card-content">
+                            <h3>Edge Devices Online</h3>
+                            <p class="stat-value">12/15</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Images Processed (7 Days)</h3>
+                        <canvas id="lineChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Threat Types</h3>
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-primary" onclick="navigateToPage('upload')">
+                        <i class="fas fa-upload"></i> Upload Image/Video
+                    </button>
+                    <button class="btn-secondary" onclick="navigateToPage('threat')">
+                        <i class="fas fa-search"></i> View Threats
+                    </button>
+                </div>
+            </div>
+
+            <div id="upload-page" class="page">
+                <h2>Upload & Enhancement</h2>
+                <div class="upload-steps">
+                    <div class="step active" id="step1">
+                        <h3>Step 1: Upload Image or Video</h3>
+                        <div class="upload-area" id="upload-area">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag & drop your file here or click to browse</p>
+                            <input type="file" id="file-input" accept="image/*,video/*" hidden>
+                        </div>
+                    </div>
+                    <div class="step" id="step2">
+                        <h3>Step 2: Select Enhancement Model</h3>
+                        <div class="model-selector">
+                            <label><input type="radio" name="enhancement-model" value="unet" checked> U-Net</label>
+                            <label><input type="radio" name="enhancement-model" value="cyclegan"> CycleGAN</label>
+                            <label><input type="radio" name="enhancement-model" value="pix2pix"> Pix2Pix</label>
+                            <label><input type="radio" name="enhancement-model" value="deepseanet"> DeepSeaNet</label>
+                        </div>
+                    </div>
+                    <div class="step" id="step3">
+                        <h3>Step 3: Enhance Image</h3>
+                        <button class="btn-primary" id="enhance-btn" disabled>
+                            <i class="fas fa-magic"></i> Enhance Image
+                        </button>
+                        <div class="progress-container" id="progress-container" style="display: none;">
+                            <div class="progress-bar" id="progress-bar"></div>
+                            <p id="progress-text">0%</p>
+                        </div>
+                    </div>
+                    <div class="step" id="step4">
+                        <h3>Step 4: Results</h3>
+                        <div class="comparison-container" id="comparison-container" style="display: none;">
+                            <div class="image-comparison">
+                                <div class="image-box">
+                                    <h4>Original</h4>
+                                    <img id="original-image" alt="Original">
+                                </div>
+                                <div class="image-box">
+                                    <h4>Enhanced</h4>
+                                    <img id="enhanced-image" alt="Enhanced">
+                                </div>
+                            </div>
+                            <div class="metrics">
+                                <div class="metric">
+                                    <h4>PSNR</h4>
+                                    <p id="psnr-value">-</p>
+                                </div>
+                                <div class="metric">
+                                    <h4>SSIM</h4>
+                                    <p id="ssim-value">-</p>
+                                </div>
+                                <div class="metric">
+                                    <h4>UIQM</h4>
+                                    <p id="uiqm-value">-</p>
+                                </div>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="btn-secondary">
+                                    <i class="fas fa-download"></i> Download Enhanced Image
+                                </button>
+                                <button class="btn-primary" onclick="navigateToPage('threat')">
+                                    Next → Threat Detection
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="threat-page" class="page">
+                <h2>Threat Detection</h2>
+                <div class="threat-detection-container">
+                    <div class="detection-setup">
+                        <h3>Upload or Select Enhanced Image</h3>
+                        <div class="upload-area-small" id="threat-upload-area">
+                            <i class="fas fa-image"></i>
+                            <p>Click to select image</p>
+                            <input type="file" id="threat-file-input" accept="image/*" hidden>
+                        </div>
+                        <h3>Choose Detection Model</h3>
+                        <div class="model-selector">
+                            <label><input type="radio" name="detection-model" value="yolov8" checked> YOLOv8</label>
+                            <label><input type="radio" name="detection-model" value="yolov5"> YOLOv5</label>
+                            <label><input type="radio" name="detection-model" value="marinenet"> MarineNet</label>
+                            <label><input type="radio" name="detection-model" value="vit"> ViT</label>
+                        </div>
+                        <button class="btn-primary" id="detect-btn" disabled>
+                            <i class="fas fa-search"></i> Detect Threats
+                        </button>
+                    </div>
+                    <div class="detection-results" id="detection-results" style="display: none;">
+                        <div class="detection-image-container">
+                            <canvas id="detection-canvas"></canvas>
+                        </div>
+                        <div class="threats-table-container">
+                            <h3>Detected Threats</h3>
+                            <table class="threats-table" id="threats-table">
+                                <thead>
+                                    <tr>
+                                        <th>Threat Type</th>
+                                        <th>Confidence</th>
+                                        <th>Severity</th>
+                                        <th>Location</th>
+                                        <th>Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <div class="action-buttons">
+                                <button class="btn-secondary">
+                                    <i class="fas fa-file-pdf"></i> Download Report
+                                </button>
+                                <button class="btn-primary" id="send-alert-btn">
+                                    <i class="fas fa-paper-plane"></i> Send Alert
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="analytics-page" class="page">
+                <h2>Analytics</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>Total Threats</h3>
+                        <p class="stat-value">23</p>
+                    </div>
+                    <div class="card">
+                        <h3>Avg Confidence</h3>
+                        <p class="stat-value">87.3%</p>
+                    </div>
+                    <div class="card">
+                        <h3>Most Common Threat</h3>
+                        <p class="stat-value">Mine</p>
+                    </div>
+                    <div class="card">
+                        <h3>Model Performance</h3>
+                        <p class="stat-value">Excellent</p>
+                    </div>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Images Processed per Day</h3>
+                        <canvas id="analyticsLineChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Threat Types Distribution</h3>
+                        <canvas id="analyticsPieChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container full-width">
+                    <h3>Confidence by Threat Type</h3>
+                    <canvas id="analyticsBarChart"></canvas>
+                </div>
+            </div>
+
+            <div id="health-page" class="page">
+                <h2>System Health</h2>
+                <div class="health-metrics">
+                    <div class="metric-card">
+                        <h3>CPU Usage</h3>
+                        <div class="usage-bar">
+                            <div class="usage-fill" style="width: 45%;" id="cpu-bar"></div>
+                        </div>
+                        <p id="cpu-value">45%</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>GPU Usage</h3>
+                        <div class="usage-bar">
+                            <div class="usage-fill" style="width: 78%;" id="gpu-bar"></div>
+                        </div>
+                        <p id="gpu-value">78%</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Memory Usage</h3>
+                        <div class="usage-bar">
+                            <div class="usage-fill" style="width: 62%;" id="memory-bar"></div>
+                        </div>
+                        <p id="memory-value">62%</p>
+                    </div>
+                </div>
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>Model Latency</h3>
+                        <p class="stat-value">45ms</p>
+                    </div>
+                    <div class="card">
+                        <h3>System Uptime</h3>
+                        <p class="stat-value">15d 4h 23m</p>
+                    </div>
+                </div>
+                <h3>Edge Device Status</h3>
+                <div class="devices-grid">
+                    <div class="device-card online">
+                        <i class="fas fa-server"></i>
+                        <p>Device 1</p>
+                        <span class="status">Online</span>
+                    </div>
+                    <div class="device-card online">
+                        <i class="fas fa-server"></i>
+                        <p>Device 2</p>
+                        <span class="status">Online</span>
+                    </div>
+                    <div class="device-card offline">
+                        <i class="fas fa-server"></i>
+                        <p>Device 3</p>
+                        <span class="status">Offline</span>
+                    </div>
+                    <div class="device-card online">
+                        <i class="fas fa-server"></i>
+                        <p>Device 4</p>
+                        <span class="status">Online</span>
+                    </div>
+                </div>
+                <div class="retention-control">
+                    <h3>Data Retention Policy</h3>
+                    <select id="retention-select">
+                        <option value="7">7 days</option>
+                        <option value="30" selected>30 days</option>
+                        <option value="90">90 days</option>
+                    </select>
+                    <button class="btn-secondary" id="clear-data-btn">
+                        <i class="fas fa-trash"></i> Clear Old Data
+                    </button>
+                </div>
+            </div>
+
+            <div id="notifications-page" class="page">
+                <h2>Notifications</h2>
+                <div class="action-buttons">
+                    <button class="btn-secondary" id="mark-read-btn">
+                        <i class="fas fa-check"></i> Mark All as Read
+                    </button>
+                    <button class="btn-primary" id="email-alert-btn">
+                        <i class="fas fa-envelope"></i> Send Email Alert
+                    </button>
+                    <button class="btn-primary" id="sms-alert-btn">
+                        <i class="fas fa-sms"></i> Send SMS Alert
+                    </button>
+                </div>
+                <div class="notifications-list" id="notifications-list">
+                    <div class="notification-item unread">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <div class="notification-content">
+                            <h4>High turbidity detected</h4>
+                            <p>Water quality degraded in sector A-7</p>
+                            <span class="timestamp">2 hours ago</span>
+                        </div>
+                    </div>
+                    <div class="notification-item unread">
+                        <i class="fas fa-bomb"></i>
+                        <div class="notification-content">
+                            <h4>Possible mine detected</h4>
+                            <p>Object detected at coordinates 23.45N, 58.12E</p>
+                            <span class="timestamp">4 hours ago</span>
+                        </div>
+                    </div>
+                    <div class="notification-item unread">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="notification-content">
+                            <h4>Model performance degraded</h4>
+                            <p>Detection accuracy dropped to 82%</p>
+                            <span class="timestamp">6 hours ago</span>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="notification-content">
+                            <h4>System update completed</h4>
+                            <p>All models updated successfully</p>
+                            <span class="timestamp">1 day ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="models-page" class="page">
+                <h2>Model Management</h2>
+                <div class="active-models">
+                    <h3>Current Active Models</h3>
+                    <div class="model-info">
+                        <div class="info-item">
+                            <label>Enhancement Model:</label>
+                            <span id="active-enhancement">U-Net</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Detection Model:</label>
+                            <span id="active-detection">YOLOv8</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Model Type:</label>
+                            <span id="active-type">Full</span>
+                        </div>
+                        <div class="info-item">
+                            <label>TensorRT Optimized:</label>
+                            <span class="badge-success">Yes (NVIDIA Edge)</span>
+                        </div>
+                    </div>
+                </div>
+                <h3>Download Models</h3>
+                <div class="models-grid">
+                    <div class="model-card">
+                        <i class="fas fa-download"></i>
+                        <h4>YOLOv8</h4>
+                        <p>Detection Model</p>
+                        <button class="btn-secondary">Download Model</button>
+                        <button class="btn-secondary">Download Docker</button>
+                    </div>
+                    <div class="model-card">
+                        <i class="fas fa-download"></i>
+                        <h4>YOLOv5</h4>
+                        <p>Detection Model</p>
+                        <button class="btn-secondary">Download Model</button>
+                        <button class="btn-secondary">Download Docker</button>
+                    </div>
+                    <div class="model-card">
+                        <i class="fas fa-download"></i>
+                        <h4>U-Net</h4>
+                        <p>Enhancement Model</p>
+                        <button class="btn-secondary">Download Model</button>
+                        <button class="btn-secondary">Download Docker</button>
+                    </div>
+                    <div class="model-card">
+                        <i class="fas fa-download"></i>
+                        <h4>CycleGAN</h4>
+                        <p>Enhancement Model</p>
+                        <button class="btn-secondary">Download Model</button>
+                        <button class="btn-secondary">Download Docker</button>
+                    </div>
+                    <div class="model-card">
+                        <i class="fas fa-download"></i>
+                        <h4>Pix2Pix</h4>
+                        <p>Enhancement Model</p>
+                        <button class="btn-secondary">Download Model</button>
+                        <button class="btn-secondary">Download Docker</button>
+                    </div>
+                    <div class="model-card">
+                        <i class="fas fa-download"></i>
+                        <h4>DeepSeaNet</h4>
+                        <p>Enhancement Model</p>
+                        <button class="btn-secondary">Download Model</button>
+                        <button class="btn-secondary">Download Docker</button>
+                    </div>
+                </div>
+                <h3>Deploy Model to Edge Device</h3>
+                <div class="deployment-section">
+                    <select id="device-select">
+                        <option value="">Select Device</option>
+                        <option value="device1">Edge Device 1</option>
+                        <option value="device2">Edge Device 2</option>
+                        <option value="device3">Edge Device 3</option>
+                        <option value="device4">Edge Device 4</option>
+                    </select>
+                    <button class="btn-primary" id="deploy-btn">
+                        <i class="fas fa-rocket"></i> Deploy Model
+                    </button>
+                </div>
+            </div>
+
+            <div id="settings-page" class="page">
+                <h2>Settings</h2>
+                <div class="settings-section">
+                    <h3>Model Configuration</h3>
+                    <div class="setting-item">
+                        <label>Model Type:</label>
+                        <select id="model-type-select">
+                            <option value="full">Full</option>
+                            <option value="quantized">Quantized</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label>Retention Policy:</label>
+                        <select id="settings-retention-select">
+                            <option value="7">7 days</option>
+                            <option value="30" selected>30 days</option>
+                            <option value="90">90 days</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3>Alerts</h3>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="email-alerts" checked>
+                            Email Alerts
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="sms-alerts" checked>
+                            SMS Alerts
+                        </label>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3>Access Control</h3>
+                    <div class="setting-item">
+                        <label>Access Level:</label>
+                        <select id="access-level-select" disabled>
+                            <option value="admin">Admin</option>
+                            <option value="operator">Operator</option>
+                            <option value="viewer">Viewer</option>
+                        </select>
+                        <p class="help-text">Access level is set at login</p>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <h3>Appearance</h3>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="dark-mode" checked>
+                            Dark Mode
+                        </label>
+                    </div>
+                </div>
+                <button class="btn-primary" id="save-settings-btn">
+                    <i class="fas fa-save"></i> Save Settings
+                </button>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Developed for DRDO — NavalSight Prototype for Maritime Security</p>
+        </footer>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
