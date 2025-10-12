@@ -6,12 +6,18 @@ NavalSight is a web-based maritime AI command center designed for threat detecti
 
 ## Recent Changes
 
-**October 12, 2025 - Complete Implementation**
+**October 12, 2025 - Enhanced Features Update**
+- ✅ **Image Enhancement Workflow**: Complete 4-step process with sample maritime images, model selection cards, animated processing status, and side-by-side comparison with metrics
+- ✅ **Threat Detection Workflow**: Enhanced 3-step detection system with sample images, AI model selection, canvas-based bounding boxes, color-coded severity, and threat analysis table
+- ✅ **Stock Images**: Added 7 high-quality maritime images (underwater scenes, naval ships, submarines) for demonstration
+- ✅ **Canvas Processing**: Real-time image enhancement with contrast/brightness/saturation adjustments and threat visualization with color-coded bounding boxes
+- ✅ **Professional UI**: Step numbers, progress indicators, model cards with accuracy ratings, enhancement badges, and detection legends
+- ✅ **Seamless Flow**: Transfer enhanced images directly to threat detection, reset functionality, download options
+
+**October 12, 2025 - Initial Implementation**
 - ✅ Created full HTML structure with 11 functional pages (Login, Dashboard, Upload & Enhancement, Threat Detection, Analytics, System Health, Notifications, Model Management, Settings)
 - ✅ Implemented comprehensive CSS styling with dark navy/teal theme, responsive design, and smooth animations
 - ✅ Built all JavaScript functionality: navigation, role-based access control, real-time clock, Chart.js integration
-- ✅ Added simulated image enhancement with progress bars, metrics (PSNR, SSIM, UIQM), and before/after comparison
-- ✅ Implemented threat detection simulation with canvas-based bounding boxes and threat severity tables
 - ✅ Integrated Chart.js for dashboard and analytics visualizations (line, pie, doughnut, bar charts)
 - ✅ Implemented proper role-based authorization with permission guards on all navigation paths
 - ✅ Added modal system for user feedback and alerts
