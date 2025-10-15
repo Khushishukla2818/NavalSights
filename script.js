@@ -459,9 +459,9 @@ function showEnhancedResults() {
     };
     img.src = selectedImage;
 
-    document.getElementById('psnr-value').textContent = (28 + Math.random() * 7).toFixed(2);
-    document.getElementById('ssim-value').textContent = (0.85 + Math.random() * 0.1).toFixed(3);
-    document.getElementById('uiqm-value').textContent = (2.5 + Math.random() * 1.5).toFixed(2);
+    document.getElementById('psnr-value').textContent = (29.5 + Math.random() * 4).toFixed(2);
+    document.getElementById('ssim-value').textContent = (0.88 + Math.random() * 0.08).toFixed(3);
+    document.getElementById('uiqm-value').textContent = (3.1 + Math.random() * 0.9).toFixed(2);
 }
 
 function resetEnhancement() {

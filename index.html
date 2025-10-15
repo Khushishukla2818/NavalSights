@@ -158,9 +158,25 @@
                         <h3><span class="step-number">1</span> Select or Upload Image</h3>
                         <p class="step-description">Choose a sample maritime image or upload your own</p>
                         
+                        <div class="sample-images-section">
+                            <h4>Sample Images</h4>
+                            <div class="sample-images-grid">
+                                <div class="sample-image-card" data-image="attached_assets/stock_images/underwater_ocean_sce_b355f0c6.jpg">
+                                    <img src="attached_assets/stock_images/underwater_ocean_sce_b355f0c6.jpg" alt="Underwater Ocean Scene">
+                                    <p>Underwater Ocean</p>
+                                </div>
+                                <div class="sample-image-card" data-image="attached_assets/stock_images/submarine_underwater_99e22efe.jpg">
+                                    <img src="attached_assets/stock_images/submarine_underwater_99e22efe.jpg" alt="Submarine Underwater">
+                                    <p>Submarine Scene</p>
+                                </div>
+                                <div class="sample-image-card" data-image="attached_assets/stock_images/naval_ship_at_sea_551e7db4.jpg">
+                                    <img src="attached_assets/stock_images/naval_ship_at_sea_551e7db4.jpg" alt="Naval Ship">
+                                    <p>Naval Ship</p>
+                                </div>
+                            </div>
+                        </div>
                         
-                        
-                
+                        <div class="divider">OR</div>
                         
                         <div class="upload-area" id="upload-area">
                             <i class="fas fa-cloud-upload-alt"></i>
@@ -316,7 +332,25 @@
                         <h3><span class="step-number">1</span> Select Image for Detection</h3>
                         <p class="step-description">Choose a maritime image to analyze for threats</p>
                       
+                        <div class="threat-sample-images">
+                            <h4>Sample Images</h4>
+                            <div class="threat-images-grid">
+                                <div class="threat-sample-card" data-image="attached_assets/stock_images/underwater_ocean_sce_d5d2ea95.jpg">
+                                    <img src="attached_assets/stock_images/underwater_ocean_sce_d5d2ea95.jpg" alt="Underwater Scene">
+                                    <p>Ocean Scan</p>
+                                </div>
+                                <div class="threat-sample-card" data-image="attached_assets/stock_images/submarine_underwater_c054e742.jpg">
+                                    <img src="attached_assets/stock_images/submarine_underwater_c054e742.jpg" alt="Submarine">
+                                    <p>Submarine Area</p>
+                                </div>
+                                <div class="threat-sample-card" data-image="attached_assets/stock_images/naval_ship_at_sea_e3822959.jpg">
+                                    <img src="attached_assets/stock_images/naval_ship_at_sea_e3822959.jpg" alt="Naval Ship">
+                                    <p>Surface Vessel</p>
+                                </div>
+                            </div>
+                        </div>
                         
+                        <div class="divider">OR</div>
                         
                         <div class="upload-area-small" id="threat-upload-area">
                             <i class="fas fa-image"></i>
@@ -423,38 +457,153 @@
             </div>
 
             <div id="analytics-page" class="page">
-                <h2>Analytics</h2>
+                <h2>Analytics & Detection History</h2>
+                
                 <div class="cards-grid">
                     <div class="card">
-                        <h3>Total Threats</h3>
-                        <p class="stat-value">23</p>
+                        <div class="card-icon warning"><i class="fas fa-exclamation-circle"></i></div>
+                        <div class="card-content">
+                            <h3>Total Detections</h3>
+                            <p class="stat-value">156</p>
+                        </div>
                     </div>
                     <div class="card">
-                        <h3>Avg Confidence</h3>
-                        <p class="stat-value">87.3%</p>
+                        <div class="card-icon success"><i class="fas fa-percentage"></i></div>
+                        <div class="card-content">
+                            <h3>Avg Confidence</h3>
+                            <p class="stat-value">92.4%</p>
+                        </div>
                     </div>
                     <div class="card">
-                        <h3>Most Common Threat</h3>
-                        <p class="stat-value">Mine</p>
+                        <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="card-content">
+                            <h3>Avg UIQM Score</h3>
+                            <p class="stat-value">3.42</p>
+                        </div>
                     </div>
                     <div class="card">
-                        <h3>Model Performance</h3>
-                        <p class="stat-value">Excellent</p>
+                        <div class="card-icon info"><i class="fas fa-water"></i></div>
+                        <div class="card-content">
+                            <h3>Depth Range</h3>
+                            <p class="stat-value">50-450m</p>
+                        </div>
                     </div>
                 </div>
+                
+                <div class="analytics-section">
+                    <h3><i class="fas fa-table"></i> Recent Detection History</h3>
+                    <div class="detection-history-table-container">
+                        <table class="detection-history-table">
+                            <thead>
+                                <tr>
+                                    <th>Date/Time</th>
+                                    <th>Object Type</th>
+                                    <th>Confidence</th>
+                                    <th>AUV Coordinates</th>
+                                    <th>Depth (m)</th>
+                                    <th>UIQM</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2025-10-15 14:32</td>
+                                    <td><i class="fas fa-bomb"></i> Underwater Mine</td>
+                                    <td><strong>94.2%</strong></td>
+                                    <td>23.45°N, 58.12°E</td>
+                                    <td>127</td>
+                                    <td>3.67</td>
+                                    <td><span class="status-badge high">High Risk</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2025-10-15 14:18</td>
+                                    <td><i class="fas fa-ship"></i> Submarine</td>
+                                    <td><strong>89.7%</strong></td>
+                                    <td>23.42°N, 58.08°E</td>
+                                    <td>215</td>
+                                    <td>2.94</td>
+                                    <td><span class="status-badge medium">Medium Risk</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2025-10-15 13:54</td>
+                                    <td><i class="fas fa-box"></i> Debris</td>
+                                    <td><strong>76.3%</strong></td>
+                                    <td>23.38°N, 58.15°E</td>
+                                    <td>92</td>
+                                    <td>4.12</td>
+                                    <td><span class="status-badge low">Low Risk</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2025-10-15 13:41</td>
+                                    <td><i class="fas fa-ship"></i> Naval Vessel</td>
+                                    <td><strong>96.8%</strong></td>
+                                    <td>23.51°N, 58.22°E</td>
+                                    <td>8</td>
+                                    <td>5.21</td>
+                                    <td><span class="status-badge low">Identified</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2025-10-15 13:29</td>
+                                    <td><i class="fas fa-question-circle"></i> Unknown Object</td>
+                                    <td><strong>68.5%</strong></td>
+                                    <td>23.47°N, 58.19°E</td>
+                                    <td>342</td>
+                                    <td>2.18</td>
+                                    <td><span class="status-badge medium">Under Review</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2025-10-15 13:12</td>
+                                    <td><i class="fas fa-bomb"></i> Underwater Mine</td>
+                                    <td><strong>91.4%</strong></td>
+                                    <td>23.44°N, 58.11°E</td>
+                                    <td>156</td>
+                                    <td>3.28</td>
+                                    <td><span class="status-badge high">High Risk</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
                 <div class="charts-grid">
                     <div class="chart-container">
-                        <h3>Images Processed per Day</h3>
+                        <h3>Weekly Detection Trend</h3>
                         <canvas id="analyticsLineChart"></canvas>
                     </div>
                     <div class="chart-container">
-                        <h3>Threat Types Distribution</h3>
+                        <h3>Object Type Distribution</h3>
                         <canvas id="analyticsPieChart"></canvas>
                     </div>
                 </div>
                 <div class="chart-container full-width">
-                    <h3>Confidence by Threat Type</h3>
+                    <h3>Confidence Levels by Object Type</h3>
                     <canvas id="analyticsBarChart"></canvas>
+                </div>
+                
+                <div class="analytics-section">
+                    <h3><i class="fas fa-chart-bar"></i> Enhancement Metrics Overview</h3>
+                    <div class="metrics-overview-grid">
+                        <div class="metric-overview-card">
+                            <h4>PSNR (Peak Signal-to-Noise Ratio)</h4>
+                            <p class="metric-large">31.84 dB</p>
+                            <p class="metric-description">Average image quality improvement</p>
+                        </div>
+                        <div class="metric-overview-card">
+                            <h4>SSIM (Structural Similarity Index)</h4>
+                            <p class="metric-large">0.921</p>
+                            <p class="metric-description">Structural preservation score</p>
+                        </div>
+                        <div class="metric-overview-card">
+                            <h4>UIQM (Underwater Image Quality)</h4>
+                            <p class="metric-large">3.42</p>
+                            <p class="metric-description">Underwater-specific quality metric</p>
+                        </div>
+                        <div class="metric-overview-card">
+                            <h4>Processing Time</h4>
+                            <p class="metric-large">2.3s</p>
+                            <p class="metric-description">Average enhancement duration</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -668,6 +817,20 @@
                     <div class="report-preview">
                         <h4>Latest Processing Report</h4>
                        
+                        <div class="report-images">
+                            <div class="report-image-box">
+                                <h4><i class="fas fa-image"></i> Original Image</h4>
+                                <img id="report-original" src="attached_assets/stock_images/underwater_ocean_sce_b355f0c6.jpg" alt="Original">
+                            </div>
+                            <div class="report-image-box">
+                                <h4><i class="fas fa-magic"></i> Enhanced Image</h4>
+                                <img id="report-enhanced" src="attached_assets/stock_images/underwater_ocean_sce_b355f0c6.jpg" alt="Enhanced">
+                            </div>
+                            <div class="report-image-box">
+                                <h4><i class="fas fa-crosshairs"></i> Detected Image</h4>
+                                <img id="report-detected" src="attached_assets/stock_images/underwater_ocean_sce_b355f0c6.jpg" alt="Detected">
+                            </div>
+                        </div>
                         
                         <div class="report-details">
                             <h4>Detection Details</h4>
