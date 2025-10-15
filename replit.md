@@ -6,6 +6,18 @@ NavalSight is a web-based maritime AI command center designed for threat detecti
 
 ## Recent Changes
 
+**October 15, 2025 - Demo Enhancement & Analytics Expansion**
+- ✅ **Sample Image Integration**: Added clickable sample image cards to Upload & Enhancement section (3 maritime images) and Threat Detection section (3 images) for easy demo workflow
+- ✅ **Reports Image Display**: Enhanced Reports & Downloads page with side-by-side display of original, enhanced, and detected images with proper styling
+- ✅ **Analytics Page Overhaul**: Completely redesigned Analytics page to differentiate from Dashboard:
+  - Added comprehensive detection history table with Date/Time, Object Type, Confidence, AUV Coordinates, Depth, UIQM scores, and Status
+  - Implemented 6 realistic detection records with proper maritime data (coordinates: 23°N, 58°E region, depths: 8-342m)
+  - Added Enhancement Metrics Overview section with averaged PSNR (31.84 dB), SSIM (0.921), UIQM (3.42), and Processing Time (2.3s)
+  - Updated chart titles for clarity (Weekly Detection Trend, Object Type Distribution, Confidence Levels by Object Type)
+- ✅ **Realistic Metric Values**: Updated UIQM and quality metrics to research-based ranges (PSNR: 29.5-33.5 dB, SSIM: 0.88-0.96, UIQM: 3.1-4.0)
+- ✅ **CSS Enhancements**: Added comprehensive styling for detection history tables, analytics sections, metric overview cards, status badges (high/medium/low risk), and responsive table containers
+- ✅ **Data Differentiation**: Dashboard focuses on real-time overview (Images Processed, Threats, Active Model, Edge Devices), while Analytics provides deep-dive historical data and metrics analysis
+
 **October 12, 2025 - Advanced Features & UI Enhancement**
 - ✅ **Reports & Downloads Page**: Complete report system with side-by-side image comparison (original/enhanced/detected), detailed metrics display (PSNR, SSIM, UIQM), threat analysis, and download options for PDF, Raw Images, JSON Data, and Model Outputs
 - ✅ **Alert Configuration System**: Confidence and severity threshold sliders, alert method selection (Email/SMS/In-App), test alert functionality, and auto-save configuration
